@@ -85,10 +85,9 @@ class Tr(Builtin):
     
     #TODO: generalize to vectors and higher-rank tensors
     
-    def apply_single(self, m, evaluation):
-        'Tr[m_]'
-        
-        return self.apply(m, Plus(), evaluation) 
+    rules = {
+        'Tr[m_]': 'Tr[m, Plus]',
+    }
     
     def apply(self, m, f, evaluation):
         'Tr[m_, f_]'
@@ -96,9 +95,9 @@ class Tr(Builtin):
         matrix = to_sympy_matrix(m)
         if matrix is None or matrix.cols != matrix.rows or matrix.cols == 0:
             return evaluation.message('Tr', 'matsq', m)
-        diag_elems = [matrix[i, i] for i in range(matrix.rows)]
         # SymPy doesn't have a builtin for diagonal elements, so we have to do it ourselves
-        tr = reduce(f.apply, diag_elems)
+        diag_elems = [matrix[i, i] for i in range(matrix.rows)]
+        tr = reduce(f, diag_elems)
         return from_sympy(tr)
 
 
