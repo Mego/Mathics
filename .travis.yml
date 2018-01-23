@@ -15,7 +15,7 @@ env:
     - CYTHON="false"
 branches:
   only:
-    - test
+  - test
 matrix:
   fast_finish: true
   include:
