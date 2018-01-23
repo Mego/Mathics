@@ -88,7 +88,7 @@ class Tr(Builtin):
     def apply_single(self, m, evaluation):
         'Tr[m_]'
         
-        return self.apply(m, Plus, evaluation) 
+        return self.apply(m, Plus(), evaluation) 
     
     def apply(self, m, f, evaluation):
         'Tr[m_, f_]'
