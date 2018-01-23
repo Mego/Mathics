@@ -96,6 +96,7 @@ class Tr(Builtin):
         matrix = to_sympy_matrix(m)
         if matrix is None or matrix.cols != matrix.rows or matrix.cols == 0:
             return evaluation.message('Tr', 'matsq', m)
+        # SymPy doesn't have a builtin for diagonal elements, so we have to do it ourselves
         diag_elems = [m[i][i] for i in range(matrix.rows)]
         tr = reduce(f.apply, diag_elems)
         return from_sympy(tr)
