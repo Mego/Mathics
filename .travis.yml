@@ -13,9 +13,6 @@ env:
     - DOC="false"
     - ALL_MODULES="false"
     - CYTHON="false"
-branches:
-  only:
-  - test
 matrix:
   fast_finish: true
   include:
