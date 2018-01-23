@@ -87,6 +87,3 @@ script:
     else
       python mathics/test.py;
     fi
-notifications:
-    email: false
-    slack: mathics:VIjdkcZPlA79sOtVOtyjdOcT
