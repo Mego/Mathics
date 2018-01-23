@@ -11,11 +11,13 @@ from __future__ import absolute_import
 import six
 from six.moves import range
 from six.moves import zip
+from six.moves import reduce
 
 import sympy
 from mpmath import mp
 
 from mathics.builtin.base import Builtin
+from mathics.builtin.arithmetic import Plus
 from mathics.core.convert import from_sympy
 from mathics.core.expression import Expression, Integer, Symbol, Real
 
@@ -71,21 +73,31 @@ class Tr(Builtin):
     Symbolic trace:
     >> Tr[{{a, b, c}, {d, e, f}, {g, h, i}}]
      = a + e + i
+     
+    Function trace:
+    >> Tr[{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, Subtract]
+     = -13
     """
     
     messages = {
         'matsq': "The matrix `1` is not square."
     }
     
-    #TODO: generalize to vectors and higher-rank tensors, and allow function arguments for application
+    #TODO: generalize to vectors and higher-rank tensors
     
-    def apply(self, m, evaluation):
+    def apply_single(self, m, evaluation):
         'Tr[m_]'
+        
+        return self.apply(m, Plus, evaluation) 
+    
+    def apply(self, m, f, evaluation):
+        'Tr[m_, f_]'
         
         matrix = to_sympy_matrix(m)
         if matrix is None or matrix.cols != matrix.rows or matrix.cols == 0:
             return evaluation.message('Tr', 'matsq', m)
-        tr = matrix.trace()
+        diag_elems = [m[i][i] for i in range(matrix.rows)]
+        tr = reduce(f.apply, diag_elems)
         return from_sympy(tr)
 
 
